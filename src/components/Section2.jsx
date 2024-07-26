@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
 const SleepingArrangement = ({ image, type, beds }) => (
   <div className="sleeping-arrangement">
@@ -8,17 +9,36 @@ const SleepingArrangement = ({ image, type, beds }) => (
   </div>
 );
 
-const Section2 = () => {
+const Section2 = ({ slug }) => {
+  const [hotelData, setHotelData] = useState(null);
+
+  useEffect(() => {
+    const fetchHotelData = async () => {
+      try {
+        const response = await axios.get(`http://localhost:3000/hotels/${slug}`);
+        setHotelData(response.data);
+      } catch (error) {
+        console.error('Error fetching hotel data:', error);
+      }
+    };
+
+    fetchHotelData();
+  }, [slug]);
+
+  if (!hotelData) return <div>Loading...</div>;
+
   const sleepingArrangements = [
-    { image: "images/section1_img1.jpg", type: "Bedroom", beds: "1 double bed" },
+    { image: "images/section1_img1.jpg", type: "Bedroom", beds: `${hotelData.bedroom_count} bed(s)` },
     // Add more sleeping arrangements here in the future
   ];
 
   return (
     <div className="section2">
       <div className="section2_left" id="section2_left_i">
-        <div className="section2_left_1" id="section2_left_1_txt">Entire rental unit in Limpa, Peru</div>
-        <div className="section2_left_2">2 guests · 1 bedroom · 1 bed · 1 bath</div>
+        <div className="section2_left_1" id="section2_left_1_txt">{hotelData.title}</div>
+        <div className="section2_left_2">
+          {hotelData.guest_count} guests · {hotelData.bedroom_count} bedroom(s) · {hotelData.bedroom_count} bed(s) · {hotelData.bathroom_count} bath(s)
+        </div>
         <div className="section2_left_3">★New</div>
         <hr />
         <div className="section2_left_4">
@@ -26,8 +46,8 @@ const Section2 = () => {
             <img src="images/section_2_left_man.jpg" alt="Host" />
           </div>
           <div className="section2_left_4_right">
-            <p id="section2_left_4_right_p1">Hosted by Farnando</p>
-            <p id="section2_left_4_right_p2">Super host 7 years hosting</p>
+            <p id="section2_left_4_right_p1">Hosted by {hotelData.host_information.name}</p>
+            <p id="section2_left_4_right_p2">Super host {hotelData.host_information.years_hosting} years hosting</p>
           </div>
         </div>
         <hr />
@@ -50,11 +70,11 @@ const Section2 = () => {
         <hr />
         <div className="section2_left_6">
           <div className="section2_left_6_1st">
-            Some info has been automatically traslated.<b>Show original</b>
+            Some info has been automatically translated.<b>Show original</b>
           </div>
           <div className="section2_left_6_2nd">
-            Welcome to our brand-new 1 bedroom apartment, in a quiet and central location next to a park!<br /><br />
-            It's conveniently located in Pueblo Libre, just 25min. away from the airport. Steps away from Clínica Stella Maris, Universidad Antonio Ruiz de Montoya, Instituto Británico, Hospital Santa Rosa, YMCA Peru and Alas Peruanas University. It's also very close to La...<br /><br />
+            {hotelData.description}
+            <br /><br />
             <b>Show more &gt;</b>
           </div>
           <div className="section2_left_6_3rd"></div>
@@ -77,18 +97,13 @@ const Section2 = () => {
         <div className="section2_left_8_container">
           <h2>What this place offers</h2>
           <div className="amenities-grid">
-            <div className="amenity"><span className="icon">🍳</span> Kitchen</div>
-            <div className="amenity"><span className="icon">📶</span> Wifi</div>
-            <div className="amenity"><span className="icon">📺</span> TV</div>
-            <div className="amenity"><span className="icon">🛗</span> Elevator</div>
-            <div className="amenity"><span className="icon">🧺</span> Washer</div>
-            <div className="amenity"><span className="icon">👕</span> Dryer</div>
-            <div className="amenity"><span className="icon">💨</span> Hair dryer</div>
-            <div className="amenity"><span className="icon">🧊</span> Refrigerator</div>
-            <div className="amenity"><span className="icon">⚠️</span> <del>Carbon monoxide alarm</del></div>
-            <div className="amenity"><span className="icon">🚭</span> <del>Smoke alarm</del></div>
+            {hotelData.amenities.map((amenity, index) => (
+              <div key={index} className="amenity">
+                <span className="icon">🔹</span> {amenity}
+              </div>
+            ))}
           </div>
-          <button className="show-more">Show all 32 amenities</button>
+          <button className="show-more">Show all {hotelData.amenities.length} amenities</button>
         </div>
         <hr />
       </div>

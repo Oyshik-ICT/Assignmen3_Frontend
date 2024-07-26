@@ -21,8 +21,8 @@ function App() {
   useEffect(() => {
     const fetchImages = async () => {
       try {
-        const response = await axios.get(`http://localhost:3000/hotels/${hotelSlug}/images`);
-        setImages(response.data.map(path => `http://localhost:3000/${path}`));
+        const response = await axios.get(`http://localhost:3000/hotels/${hotelSlug}`);
+        setImages(response.data.images.map(path => `http://localhost:3000/${path}`));
       } catch (error) {
         console.error('Error fetching images:', error);
       }
@@ -48,7 +48,7 @@ function App() {
           <Section1Right images={images.slice(1)} />
         </div>
         <ImageBtn images={images} />
-        <Section2 />
+        <Section2 slug={hotelSlug}/>
         <Section2Left10 />
         <hr />
         <Section2Left11 />
@@ -63,3 +63,7 @@ function App() {
 }
 
 export default App;
+
+
+
+
