@@ -12,10 +12,12 @@ import Section2Left12 from "./components/Section2Left12";
 import Section2Left13 from "./components/Section2Left13";
 import FooterPart from "./components/FooterPart";
 import { Helmet } from 'react-helmet';
+import ShimmerLoader from './components/Shimmer';
 import './App.css';
 
 function App() {
   const [images, setImages] = useState([]);
+  const [loading, setLoading] = useState(true);
   const hotelSlug = 'Limpa-Peru';
 
   useEffect(() => {
@@ -25,6 +27,8 @@ function App() {
         setImages(response.data.images.map(path => `http://localhost:3000/${path}`));
       } catch (error) {
         console.error('Error fetching images:', error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -34,21 +38,27 @@ function App() {
   return (
     <>
       <Helmet>
-        <link 
-          rel="stylesheet" 
+        <link
+          rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
         />
       </Helmet>
       <HeaderPart />
-      <hr/>
+      <hr />
       <main>
         <Section1 />
         <div className="section1_container">
-          <Section1left imageSrc={images[0]} />
-          <Section1Right images={images.slice(1)} />
+          {loading ? (
+            <ShimmerLoader />
+          ) : (
+            <>
+              <Section1left imageSrc={images[0]} />
+              <Section1Right images={images.slice(1)} />
+            </>
+          )}
         </div>
         <ImageBtn images={images} />
-        <Section2 slug={hotelSlug}/>
+        <Section2 slug={hotelSlug} />
         <Section2Left10 />
         <hr />
         <Section2Left11 />
@@ -63,7 +73,6 @@ function App() {
 }
 
 export default App;
-
 
 
 
