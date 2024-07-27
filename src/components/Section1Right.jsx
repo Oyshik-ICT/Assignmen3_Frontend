@@ -29,9 +29,6 @@ const Section1Right = ({ images }) => {
             src={images[3]}
             alt="More images"
           />
-          <div className="section1_image-count">
-            +{additionalImagesCount}
-          </div>
         </div>
       );
     }

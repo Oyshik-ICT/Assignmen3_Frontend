@@ -1,16 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const SleepingArrangement = ({ image, type, beds }) => (
+const SleepingArrangement = ({ images, type, beds }) => (
   <div className="sleeping-arrangement">
-    <img src={image} alt={type} />
+    <div className="images-scroll-container">
+      {images.map((image, index) => (
+        <img key={index} src={`http://localhost:3000/${image}`} alt={`${type} ${index}`} />
+      ))}
+    </div>
     <p className="section2_left_7_p2">{type}</p>
     <p className="section2_left_7_p3">{beds}</p>
   </div>
 );
 
+
 const Section2 = ({ slug }) => {
   const [hotelData, setHotelData] = useState(null);
+  const [rooms, setRooms] = useState([]);
 
   useEffect(() => {
     const fetchHotelData = async () => {
@@ -22,15 +28,20 @@ const Section2 = ({ slug }) => {
       }
     };
 
+    const fetchRooms = async () => {
+      try {
+        const response = await axios.get(`http://localhost:3000/hotels/${slug}/rooms`);
+        setRooms(response.data);
+      } catch (error) {
+        console.error('Error fetching room data:', error);
+      }
+    };
+
     fetchHotelData();
+    fetchRooms();
   }, [slug]);
 
   if (!hotelData) return <div>Loading...</div>;
-
-  const sleepingArrangements = [
-    { image: "images/section1_img1.jpg", type: "Bedroom", beds: `${hotelData.bedroom_count} bed(s)` },
-    // Add more sleeping arrangements here in the future
-  ];
 
   return (
     <div className="section2">
@@ -62,7 +73,7 @@ const Section2 = ({ slug }) => {
           <div className="section2_left_5_1st" id="section2_left_5_2nd">
             <img src="images/section2_left_superhost.png" alt="Superhost" />
             <div className="section2_left_5_1st_p">
-              <p className="section2_left_5_1st_p1">Furnando is a superhost</p>
+              <p className="section2_left_5_1st_p1">Fernando is a superhost</p>
               <p className="section2_left_5_1st_p2">Superhost are experienced and highly rated Hosts</p>
             </div>
           </div>
@@ -83,15 +94,16 @@ const Section2 = ({ slug }) => {
         <div className="section2_left_7">
           <p className="section2_left_7_p1">Where you will sleep</p>
           <div className="sleeping-arrangements-container">
-            {sleepingArrangements.map((arrangement, index) => (
+            {rooms.map((room, index) => (
               <SleepingArrangement 
                 key={index}
-                image={arrangement.image}
-                type={arrangement.type}
-                beds={arrangement.beds}
+                images={room.room_image} // Pass array of images
+                type={room.room_title}
+                beds={`${room.bedroom_count} bed(s)`}
               />
             ))}
           </div>
+          {/* <div id="room_name">{rooms.map(room => room.room_title).join(', ')}</div> */}
         </div>
         <hr />
         <div className="section2_left_8_container">
@@ -115,8 +127,8 @@ const Section2 = ({ slug }) => {
               <table>
                 <tbody>
                   <tr>
-                    <td><b>Check In</b><br />Add data</td>
-                    <td><b>Check Out</b><br />Add data</td>
+                    <td><b>Check In</b><br />Add date</td>
+                    <td><b>Check Out</b><br />Add date</td>
                   </tr>
                   <tr>
                     <td colSpan="2"><b>Guests</b><br />1 guest</td>
@@ -134,3 +146,5 @@ const Section2 = ({ slug }) => {
 };
 
 export default Section2;
+
+

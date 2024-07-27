@@ -423,7 +423,7 @@ main{
 }
 
 .section2_left_7 img{
-  width: 300px;
+  width: 200px;
   height: 200px;
   border-radius: 5px;
 }
@@ -1638,4 +1638,21 @@ input[type="radio"]:checked + label {
 
 .share_txt{
   margin-left: 10px;
+}
+
+.images-scroll-container {
+  display: flex;
+  overflow-x: auto;
+  white-space: nowrap;
+  padding: 10px 0; /* Optional: for vertical spacing */
+}
+
+.images-scroll-container img {
+  max-height: 150px; /* Adjust based on your design */
+  margin-right: 10px; /* Spacing between images */
+  border-radius: 4px; /* Optional: for rounded corners */
+}
+
+.sleeping-arrangement {
+  margin-bottom: 20px; /* Space between arrangements */
 }
