@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Section2Left12 = () => {
+const Section2Left12 = ({hotel}) => {
   return (
     <div className="section2_left_12_container">
       <h1>Meet your Host</h1>
@@ -9,7 +9,7 @@ const Section2Left12 = () => {
           <div className="card">
             <div className="left-section">
               <img src="images/section_left_12_farnado.jpg" alt="Fernando" className="profile-pic" />
-              <div className="name">Fernando</div>
+              <div className="name">{hotel.host_information.name}</div>
               <div className="superhost">🏅 Superhost</div>
             </div>
             <div className="right-section">
