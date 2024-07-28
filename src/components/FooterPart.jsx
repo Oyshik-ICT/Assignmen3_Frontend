@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 
+
 const FooterPart = () => {
   const [currentImage, setCurrentImage] = useState(1);
   const totalImages = 21;
