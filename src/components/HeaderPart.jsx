@@ -79,7 +79,7 @@ const HeaderPart = () => {
     const days = [];
 
     for (let i = 0; i < firstDay.getDay(); i++) {
-      days.push(<div key={`empty-${i}`} classNameN="day other-month"></div>);
+      days.push(<div key={`empty-${i}`} className="day other-month"></div>);
     }
 
     for (let day = 1; day <= lastDay.getDate(); day++) {
